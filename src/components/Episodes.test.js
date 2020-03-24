@@ -22,5 +22,5 @@ test("renders error message if error is present", () => {
   rerender(<Episodes episodes={[]} error="Some error message" />);
 
 //   // assert that the error message is rendered
-//   expect(queryByTestId(/error-message/i)).toBeInTheDocument();
+  expect(queryByTestId(/error-message/i)).toBeInTheDocument();
 });

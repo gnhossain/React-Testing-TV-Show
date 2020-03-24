@@ -8,7 +8,10 @@ import { formatSeasons } from "./utils/formatSeasons";
 import Episodes from "./components/Episodes";
 import "./styles.css";
 
+import {fetchEpisodes} from "./api/fetchEpisodes"
+
 export default function App() {
+  const [error, setError] = useState("");
   const [show, setShow] = useState(null);
   const [seasons, setSeasons] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState("");
@@ -23,10 +26,43 @@ export default function App() {
         .then(res => {
           setShow(res.data);
           setSeasons(formatSeasons(res.data._embedded.episodes));
+        })
+        .catch(err => {
+          setError(err.message);
         });
+        
     };
     fetchShow();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchShow = () => {
+  //     setIsFetchingData(true);
+  //     fetchEpisodes()
+  //       .then(res => {
+  //         setIsFetchingData(false);
+  //         setShow(res.data);
+  //         setSeasons(formatSeasons(res.data._embedded.episodes));
+  //       })
+  //       .catch(err => {
+  //         setIsFetchingData(false);
+  //         setError(err.message);
+  //       });}
+  //   fetchShow();
+  // }, []);
+
+  // useEffect(() => {
+  //   async function fetchShow(){
+  //     await fetchEpisodes()
+  //       .then(res => {
+  //         console.log(res)
+  //         setShow(res);
+  //         console.log(show)
+  //         setSeasons(formatSeasons(res._embedded.episodes));
+  //       });
+  //   };
+  //   fetchShow();
+  // }, []);
 
   const handleSelect = e => {
     setSelectedSeason(e.value);
@@ -47,7 +83,8 @@ export default function App() {
         value={selectedSeason || "Select a season"}
         placeholder="Select an option"
       />
-      <Episodes episodes={episodes} />
+      <Episodes episodes={episodes} errors={error}
+      />
     </div>
   );
 }
